@@ -27,10 +27,10 @@ public class BallScript : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		if (col.gameObject.name == "Goalie") {
+		/*if (col.gameObject.name == "Goalie") {
 			Destroy (GetComponent<Rigidbody>());
 			transform.parent = col.gameObject.transform.FindChild("Collider");
 			transform.localPosition = Vector3.zero;
-		}
+		}*/
 	}
 }

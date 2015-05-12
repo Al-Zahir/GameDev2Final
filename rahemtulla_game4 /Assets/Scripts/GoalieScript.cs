@@ -4,20 +4,42 @@ using System.Collections;
 public class GoalieScript : MonoBehaviour {
 
 	public BallScript ball;
+	public Animator anim;
 
 	// Use this for initialization
 	void Start () {
 		ball = GameObject.Find ("Ball").GetComponent<BallScript> ();
+		anim.SetBool ("Ready", true);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//if ((Application.platform == RuntimePlatform.Android) ? Input.GetButtonUp ("Mobile PS4_O") : Input.GetButtonUp ("PS4_O")) 
 			//StartCoroutine("block");
+
+		anim.SetFloat ("VelocityY", GetComponent<Rigidbody>().velocity.y);
 	}
 
 	IEnumerator block(){
 		yield return new WaitForEndOfFrame ();
+		float x = 0;
+		float y = 0;
+
+		float waitTime = Time.time + (float)ball.time - 1;
+		x = (transform.position.x < ball.x) ? ball.x - (transform.localScale.x / 4) - transform.position.x : ball.x + (transform.localScale.x / 4) - transform.position.x;
+		y = (transform.position.y < ball.y) ? ball.y - (transform.localScale.y / 4) - transform.position.y : (Mathf.Abs(x) > 5) ? 5 : 0;
+
+		while (Time.time < waitTime) 
+			yield return new WaitForEndOfFrame ();
+
+		GetComponent<Rigidbody> ().velocity = new Vector3 (x, y, 0);
+
+		anim.SetFloat ("X", x);
+		anim.SetFloat ("Y", y);
+		anim.SetBool ("Block", true);
+	}
+
+	/*yield return new WaitForEndOfFrame ();
 		float x = 0;
 		float y = 0;
 
@@ -52,6 +74,5 @@ public class GoalieScript : MonoBehaviour {
 
 		Debug.Log(x + " " + y);
 
-		GetComponent<Rigidbody> ().velocity = new Vector3 (x, y, 0);
-	}
+		GetComponent<Rigidbody> ().velocity = new Vector3 (x, y, 0); */
 }
